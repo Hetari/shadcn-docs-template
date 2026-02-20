@@ -9,7 +9,7 @@ const props = defineProps<{
 
 const { config } = useConfig();
 
-function setLayout() {
+function toggleLayout() {
   const newLayout = config.value.layout === "fixed" ? "full" : "fixed";
   config.value.layout = newLayout;
 }
@@ -19,10 +19,9 @@ function setLayout() {
   <Button
     variant="ghost"
     size="icon"
-
     :class="cn('size-8', props.class)"
     title="Toggle layout"
-    @click="setLayout()"
+    @click="toggleLayout()"
   >
     <span class="sr-only">Toggle layout</span>
     <GalleryHorizontalIcon />

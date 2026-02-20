@@ -3,14 +3,14 @@ import { GithubIcon } from "lucide-vue-next";
 import { siteConfig } from "~/lib/siteConfig";
 import Skeleton from "./ui/skeleton/Skeleton.vue";
 
-const { data, pending } = useLazyFetch<{
+const { data, pending, error } = useLazyFetch<{
   repo: {
     stars: number;
   };
 }>(siteConfig.links.ungh, {});
 
-const stars = computed(() => {
-  const count = (data.value as any)?.repo?.stars;
+const stars = computed<string | null>(() => {
+  const count = data.value?.repo?.stars;
   if (count !== 0 && !count) {
     return null;
   }
@@ -25,10 +25,10 @@ const stars = computed(() => {
     <NuxtLink :to="siteConfig.links.github" rel="noreferrer" target="_blank">
       <GithubIcon />
       <span
-        v-if="!pending && stars"
+        v-if="!pending && (stars || error)"
         class="text-xs text-muted-foreground tabular-nums"
       >
-        {{ stars }}
+        {{ stars || "—" }}
       </span>
       <Skeleton v-else class="h-4 w-8" />
     </NuxtLink>

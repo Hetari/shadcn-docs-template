@@ -1,15 +1,22 @@
 <script setup lang="ts">
 const colorMode = useColorMode();
+
+function toggleTheme() {
+  const preferences = ["system", "light", "dark"];
+  const current = colorMode.preference as any;
+  const index = preferences.indexOf(current || "system");
+  const nextIndex = (index + 1) % preferences.length;
+  colorMode.preference = preferences[nextIndex] as any;
+}
 </script>
 
 <template>
-  <!-- extend-touch-target  -->
   <Button
     variant="ghost"
     size="icon"
-    class="group/toggle size-8"
+    class="group/toggle extend-touch-target size-8"
     title="Toggle theme"
-    @click="colorMode.preference = colorMode.preference === 'light' ? 'dark' : 'light' "
+    @click="toggleTheme"
   >
     <svg
       xmlns="http://www.w3.org/2000/svg"

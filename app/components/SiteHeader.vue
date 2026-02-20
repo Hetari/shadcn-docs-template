@@ -30,7 +30,7 @@ import { siteConfig } from "~/lib/siteConfig";
           <Separator class="hidden 3xl:flex" orientation="vertical" />
 
           <SiteConfig class="hidden xl:flex" />
-          <Separator orientation="vertical" />
+          <Separator class="hidden xl:flex" orientation="vertical" />
           <ModeSwitcher />
         </div>
       </div>
