@@ -61,18 +61,20 @@ export default withNuxt(
               newlinesBetween: "ignore",
             },
           ],
-          "unicorn/filename-case": [
-            "error",
-            {
-              case: "kebabCase",
-
-              ignore: ["README.md"],
-            },
-          ],
+          // "unicorn/filename-case": [
+          //   "error",
+          //   {
+          //     case: "kebabCase",
+          //     ignore: ["README.md"],
+          //   },
+          // ],
         },
         settings: {
           "better-tailwindcss": {
-            entryPoint: "./app/assets/css/main.css",
+            entryPoint: "./app/assets/css/tailwind.css",
+            group: "never",
+            preferSingleLine: true,
+            printWidth: 120,
           },
         },
       },

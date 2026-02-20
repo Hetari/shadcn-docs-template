@@ -19,11 +19,13 @@
   "dependencies": {
     "@nuxtjs/color-mode": "4.0.0",
     "@tailwindcss/vite": "^4.1.18",
+    "@vueuse/core": "^14.2.1",
     "@vueuse/nuxt": "14.2.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-vue-next": "^0.563.0",
     "nuxt": "^4.3.0",
+    "reka-ui": "^2.8.2",
     "shadcn-nuxt": "2.4.3",
     "tailwind-merge": "^3.4.0",
     "tailwindcss": "^4.1.18",
