@@ -13,6 +13,12 @@ useSeoMeta({
   twitterImage: siteConfig.ogImage,
   twitterCard: "summary_large_image",
 });
+
+defineOgImageComponent("Shadcn", {
+  title,
+  description,
+  siteName: siteConfig.name,
+});
 </script>
 
 <template>

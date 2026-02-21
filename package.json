@@ -25,6 +25,7 @@
     "clsx": "^2.1.1",
     "lucide-vue-next": "^0.563.0",
     "nuxt": "^4.3.0",
+    "nuxt-og-image": "5.1.13",
     "reka-ui": "^2.8.2",
     "shadcn-nuxt": "2.4.3",
     "tailwind-merge": "^3.4.0",

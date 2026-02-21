@@ -11,6 +11,7 @@ export default defineNuxtConfig({
     "@nuxtjs/color-mode",
     "@nuxt/a11y",
     "@nuxt/hints",
+    "nuxt-og-image",
   ],
 
   css: ["~/assets/css/main.css"],
