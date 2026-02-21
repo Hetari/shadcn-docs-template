@@ -14,6 +14,13 @@ export default defineNuxtConfig({
     "nuxt-og-image",
   ],
 
+  ogImage: {
+    defaults: {
+      width: 1200,
+      height: 630,
+    },
+  },
+
   css: ["~/assets/css/main.css"],
 
   vite: {

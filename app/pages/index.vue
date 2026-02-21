@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { siteConfig } from "~/lib/siteConfig";
 
-const title = "The Foundation for your Design System";
-const description = `A set of beautifully designed components that you can customize, extend, and build on. Start here then make it your own. Open Source. Open Code.`;
+const title = "Build your own docs like Shadcn with the power of Nuxt & Vue";
+const description = `A set of beautifully designed components that you can customize, extend, and build on. Start here then make it your own.`;
 
 useSeoMeta({
   title,
@@ -14,10 +14,15 @@ useSeoMeta({
   twitterCard: "summary_large_image",
 });
 
-defineOgImageComponent("Shadcn", {
-  title,
-  description,
-  siteName: siteConfig.name,
+defineOgImage({
+  component: "Shadcn",
+  width: 1200,
+  height: 630,
+  props: {
+    title,
+    description,
+    siteName: siteConfig.name,
+  },
 });
 </script>
 
