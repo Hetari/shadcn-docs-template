@@ -7,7 +7,26 @@ const { data, pending, error } = useLazyFetch<{
   repo: {
     stars: number;
   };
-}>(siteConfig.links.ungh, {});
+}>(siteConfig.links.ungh, {
+  cache: "default",
+  key: "github-stars",
+  getCachedData: (key) => {
+    const nuxtApp = useNuxtApp();
+    // Retrieve cached data
+    const cached = nuxtApp.payload.data[key] || nuxtApp.static.data[key];
+    if (!cached)
+      return;
+
+    // Define TTL (e.g., 12h)
+    const expiration = 12 * 60 * 60 * 1000;
+    const isExpired = Date.now() - cached.fetchedAt > expiration;
+
+    if (isExpired)
+      return;
+    return cached;
+  },
+
+});
 
 const stars = computed<string | null>(() => {
   const count = data.value?.repo?.stars;

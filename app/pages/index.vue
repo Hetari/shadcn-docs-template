@@ -16,7 +16,7 @@ useSeoMeta({
 </script>
 
 <template>
-  <div class="container">
+  <div class="flex flex-1 flex-col items-center justify-center">
     <h1>Hi</h1>
   </div>
 </template>
