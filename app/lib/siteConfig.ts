@@ -32,18 +32,15 @@ export const siteConfig: SiteConfig = {
   },
   navItems: [
     {
-      // href: "/docs/getting-started/introduction",
-      href: "/",
+      href: "/docs/getting-started/introduction",
       label: "Docs",
     },
     {
-      // href: "/docs/prose-demo",
-      href: "/",
+      href: "/docs/prose-demo",
       label: "Demo",
     },
     {
-      // href: "/docs/about",
-      href: "/",
+      href: "/docs/about",
       label: "About",
     },
   ],

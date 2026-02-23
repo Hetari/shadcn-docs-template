@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { ContentNavigationItem } from "@nuxt/content";
 import type { HTMLAttributes } from "vue";
-import { TOP_LEVEL_SECTIONS } from "@/lib/navigation";
+import { NAV_SECTIONS } from "@/lib/navigation";
 import { cn } from "@/lib/utils";
 import { showMcpDocs } from "~/lib/flag";
 
@@ -95,13 +95,13 @@ function handleNavigate(path: string) {
             </NuxtLink>
           </div>
         </div>
-        <div v-if="TOP_LEVEL_SECTIONS.length" class="flex flex-col gap-4">
+        <div v-if="NAV_SECTIONS.length" class="flex flex-col gap-4">
           <div class="text-sm font-medium text-muted-foreground">
             Sections
           </div>
           <div class="flex flex-col gap-3">
             <NuxtLink
-              v-for="{ name, href } in TOP_LEVEL_SECTIONS"
+              v-for="{ name, href } in NAV_SECTIONS"
               v-show="!(!showMcpDocs && href.includes('/mcp'))"
               :key="name"
               :to="href"
