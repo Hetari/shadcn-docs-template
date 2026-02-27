@@ -14,15 +14,10 @@ useSeoMeta({
   twitterCard: "summary_large_image",
 });
 
-defineOgImage({
-  component: "Shadcn",
-  width: 1200,
-  height: 630,
-  props: {
-    title,
-    description,
-    siteName: siteConfig.name,
-  },
+defineOgImageComponent("Custom", {
+  title,
+  description,
+  siteName: siteConfig.name,
 });
 </script>
 

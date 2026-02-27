@@ -7,10 +7,23 @@ component: true
 
 ::component-preview
 ---
-name: Button
+name: ButtonDemo
 description: A button
 ---
 ::
+
+
+### Install Dependencies
+
+```bash
+npm install @vueuse/core
+```
+
+Optional, to include icons for theme button.
+```bash
+npm install -D @iconify/vue @iconify-json/radix-icons
+```
+
 
 Hi, I'm Ebraheem Alhetari (pronounced like "Eb-ra-heem Al-he-ta-ri"). I built this documentation template as a remix of the original [shadcn-vue](https://www.shadcn-vue.com) codebase — reorganizing and simplifying it so that anyone can create a beautiful docs site just like it.
 

@@ -34,8 +34,8 @@ export const MAIN_NAVIGATION: NavItem[] = [
   //   href: "/docs/prose-demo",
   //   label: "Demo",
   // },
-  // {
-  //   href: "/docs/about",
-  //   label: "About",
-  // },
+  {
+    href: "/docs/about",
+    name: "About",
+  },
 ];
