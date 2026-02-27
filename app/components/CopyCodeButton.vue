@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { HTMLAttributes } from "vue";
+import { CopyIcon } from "lucide-vue-next";
 import { cn } from "~/lib/utils";
 import type { ButtonVariants } from "./ui/button";
 
@@ -45,7 +46,7 @@ const { config } = useConfig();
         :size="props.size"
         v-bind="$attrs"
       >
-        <IconCopy />
+        <CopyIcon />
         <span class="group-data-[size=icon-sm]/button:sr-only">
           Copy Code
         </span>
@@ -56,9 +57,9 @@ const { config } = useConfig();
     >
       <DialogHeader>
         <DialogTitle class="capitalize">
-          {{
+          s <!-- {{
             config.activeTheme === "neutral" ? "Default" : config.activeTheme
-          }}
+          }} -->
         </DialogTitle>
         <DialogDescription>
           Copy and paste the following code into your CSS file.

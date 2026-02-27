@@ -120,7 +120,7 @@ useSeoMeta({
 
           <ContentRenderer
             :value="page"
-            class="prose dark:prose-invert w-full flex-1 *:data-[slot=alert]:first:mt-0"
+            class="w-full flex-1 *:data-[slot=alert]:first:mt-0"
           />
         </div>
         <div

@@ -71,6 +71,6 @@ const { config } = useConfig();
       </div>
     </Tabs>
 
-    <CopyButton class="absolute top-2 right-2 z-10 size-7 bg-amber-600! opacity-70 hover:opacity-100 focus-visible:opacity-100" :value="tabs[config.packageManager]" />
+    <CopyButton class="absolute top-2 right-2 z-10 size-7 opacity-70 hover:opacity-100 focus-visible:opacity-100" :value="tabs[config.packageManager]" />
   </div>
 </template>
