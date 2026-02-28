@@ -9,14 +9,15 @@ export const NAV_SECTIONS: NavItem[] = [
 ];
 
 /** Sidebar group titles (lowercased) that should never be rendered. */
-export const SIDEBAR_EXCLUDED_SECTIONS: string[] = [
-];
+export const SIDEBAR_EXCLUDED_SECTIONS: string[] = [];
 
 /** Individual page paths that should be hidden from the sidebar page list. */
-export const SIDEBAR_EXCLUDED_PAGES: string[] = [
-  "/docs/introduction",
-];
+export const SIDEBAR_EXCLUDED_PAGES: string[] = ["/docs/introduction"];
 
+/**
+ * Top-level/main site navigation items primarily used in the site header.
+ * Each item follows the NavItem structure with a display name and href.
+ */
 export const MAIN_NAVIGATION: NavItem[] = [
   {
     href: "/docs/getting-started/introduction",

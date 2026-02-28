@@ -1,13 +1,8 @@
-export function fixImport(content: string) {
-  // eslint-disable-next-line regexp/no-super-linear-backtracking
-  const regex = /@\/(.+?)\/((?:.*?\/)?(?:components|ui|composables|lib))\/([\w-]+)/g;
+export function fixImport(content: string): string {
+  const regex
+    = /@\/[^/]+\/((?:.*?\/)?(?:components|ui|composables|lib))\/([\w-]+)/g;
 
-  const replacement = (
-    match: string,
-    path: string,
-    type: string,
-    component: string,
-  ) => {
+  const replacement = (match: string, type: string, component: string) => {
     if (type.endsWith("components")) {
       return `@/components/${component}`;
     }
