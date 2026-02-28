@@ -14,7 +14,8 @@
     "lint:staged": "bunx --bun lint-staged",
     "prepare": "husky",
     "changeset": "bunx --bun changeset",
-    "changeset:version": "bunx --bun changeset version"
+    "changeset:version": "bunx --bun changeset version",
+    "start": "bun preview"
   },
   "dependencies": {
     "@nuxt/content": "^3.11.2",
