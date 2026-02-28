@@ -17,7 +17,7 @@ export const siteConfig: SiteConfig = {
   name: "shadcn-docs-template",
   url: repoUrl,
   ogImage:
-    "https://raw.githubusercontent.com/hetari/shadcn-docs-template/master/og.jpg",
+    "https://raw.githubusercontent.com/hetari/shadcn-docs-template/master/public/og.png",
   description:
     "Simple, powerful and flexible site generation framework with everything you love from Nuxt.js & Shadcn Vue",
   links: {
