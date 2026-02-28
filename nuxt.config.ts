@@ -1,5 +1,4 @@
 import tailwindcss from "@tailwindcss/vite";
-import { siteConfig } from "./app/lib/siteConfig";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -123,7 +122,7 @@ export default defineNuxtConfig({
   app: {
     head: {
       link: [
-        { rel: "manifest", href: `${siteConfig.url}/site.webmanifest` },
+        { rel: "manifest", href: "/site.webmanifest" },
         { rel: "shortcut icon", href: "/favicon-16x16.png" },
         { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
       ],
