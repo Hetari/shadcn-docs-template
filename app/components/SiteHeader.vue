@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { getColors } from "~/lib/colors";
 import { MAIN_NAVIGATION } from "~/lib/navigation";
 import { siteConfig } from "~/lib/siteConfig";
 
@@ -30,7 +29,7 @@ const docData = computed(() => data.value!.find(i => i.stem === "docs")!);
         <MainNav :items="MAIN_NAVIGATION" class="hidden lg:flex" />
         <div class="ml-auto flex items-center gap-2 md:flex-1 md:justify-end">
           <div class="hidden w-full flex-1 md:flex md:w-auto md:flex-none">
-            <CommandMenu :tree="docData" :colors="getColors()" :nav-items="siteConfig.navItems" />
+            <CommandMenu :tree="docData" :nav-items="siteConfig.navItems" />
           </div>
           <Separator
             orientation="vertical"

@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { ChevronRight, CornerDownLeft, Square } from "lucide-vue-next";
-import type { Color, ColorPalette } from "@/lib/colors";
+import { ChevronRight, Copy, CornerDownLeft, Square } from "lucide-vue-next";
 import type { NavigationItem } from "~/composables/useNavigation";
 import { cn } from "~/lib/utils";
 
@@ -11,7 +10,6 @@ type Props = {
     path: string;
     stem?: string;
   };
-  colors: ColorPalette[];
   blocks?: { name: string; description: string; categories: string[] }[];
   navItems?: { href: string; label: string }[];
 };
@@ -25,8 +23,10 @@ const router = useRouter();
 const isMac = useIsMac();
 const config = useConfig();
 const open = ref(false);
-const selectedType = ref<"color" | "page" | "component" | "block" | null>(null);
+const selectedType = ref<"page" | "component" | "block" | "copy" | null>(null);
 const copyPayload = ref("");
+
+const { searchQuery, searchResults, isSearching } = useSearch();
 
 const pmToDlxCommand: Record<string, string> = {
   npm: "npx",
@@ -37,7 +37,10 @@ const pmToDlxCommand: Record<string, string> = {
 
 const packageManager = config.config.value.packageManager || "pnpm";
 
-function handlePageHighlight(isComponent: boolean, item: { path: string; title?: string }) {
+function handlePageHighlight(
+  isComponent: boolean,
+  item: { path: string; title?: string },
+) {
   if (isComponent) {
     const componentName = item.path.split("/").pop();
     selectedType.value = "component";
@@ -49,14 +52,18 @@ function handlePageHighlight(isComponent: boolean, item: { path: string; title?:
   }
 }
 
-function handleColorHighlight(color: Color) {
-  selectedType.value = "color";
-  copyPayload.value = color.className;
-}
-
-function handleBlockHighlight(block: { name: string; description: string; categories: string[] }) {
+function handleBlockHighlight(block: {
+  name: string;
+  description: string;
+  categories: string[];
+}) {
   selectedType.value = "block";
   copyPayload.value = `${pmToDlxCommand[packageManager]} shadcn-vue@latest add ${block.name}`;
+}
+
+function handleCopyHighlight() {
+  selectedType.value = "copy";
+  copyPayload.value = "click to copy";
 }
 
 function runCommand(command: () => unknown) {
@@ -80,7 +87,12 @@ onMounted(() => {
       e.preventDefault();
       open.value = !open.value;
     }
-    if (e.key === "c" && (e.metaKey || e.ctrlKey) && open.value && copyPayload.value) {
+    if (
+      e.key === "c"
+      && (e.metaKey || e.ctrlKey)
+      && open.value
+      && copyPayload.value
+    ) {
       runCommand(copy);
     }
   };
@@ -94,16 +106,18 @@ onMounted(() => {
     <DialogTrigger as-child>
       <Button
         variant="secondary"
-        :class="cn(
-          'relative h-8 w-full justify-start bg-surface pl-3 font-medium text-foreground shadow-none sm:pr-12 md:w-48 lg:w-56 xl:w-64 dark:bg-card',
-        )"
+        :class="
+          cn(
+            'relative h-8 w-full justify-start bg-surface pl-3 font-medium text-foreground shadow-none sm:pr-12 md:w-48 lg:w-56 xl:w-64 dark:bg-card',
+          )
+        "
         @click="open = true"
       >
         <span class="hidden lg:inline-flex">Search documentation...</span>
         <span class="inline-flex lg:hidden">Search...</span>
         <div class="absolute top-1.5 right-1.5 hidden gap-1 sm:flex">
           <KbdGroup>
-            <Kbd class="border">{{ isMac ? '⌘' : 'Ctrl' }}</Kbd>
+            <Kbd class="border">{{ isMac ? "⌘" : "Ctrl" }}</Kbd>
             <Kbd class="border">K</Kbd>
           </KbdGroup>
         </div>
@@ -132,13 +146,58 @@ onMounted(() => {
           return 0
         }"
       >
-        <CommandInput placeholder="Search documentation..." />
+        <CommandInput
+          v-model="searchQuery"
+          placeholder="Search documentation..."
+        />
         <CommandList class="no-scrollbar min-h-80 scroll-pt-2 scroll-pb-1.5">
           <CommandEmpty class="py-12 text-center text-sm text-muted-foreground">
-            No results found.
+            <span v-if="isSearching">Searching...</span>
+            <span v-else>No results found.</span>
           </CommandEmpty>
+
+          <!-- Search Results from Markdown Files -->
           <CommandGroup
-            v-if="navItems && navItems.length > 0"
+            v-if="searchResults.length > 0"
+            heading="Search Results"
+            class="p-0! **:data-[slot=command-group-heading]:scroll-mt-16 **:data-[slot=command-group-heading]:p-3! **:data-[slot=command-group-heading]:pb-1!"
+          >
+            <CommandItem
+              v-for="result in searchResults"
+              :key="result.path"
+              :value="`${result.title} ${result.description || ''} ${
+                result.path
+              }`"
+              @select="() => runCommand(() => router.push(result.path))"
+              @highlight="
+                () => {
+                  selectedType = 'page';
+                  copyPayload = '';
+                }
+              "
+            >
+              <ChevronRight />
+              <div class="flex flex-col">
+                <span class="font-medium">{{ result.title }}</span>
+                <span
+                  v-if="result.description"
+                  class="text-xs text-muted-foreground"
+                >{{ result.description }}</span>
+                <span
+                  v-if="result.excerpt"
+                  class="mt-1 line-clamp-1 text-xs text-muted-foreground"
+                >{{ result.excerpt }}</span>
+              </div>
+            </CommandItem>
+          </CommandGroup>
+
+          <!-- Navigation Items -->
+          <CommandGroup
+            v-if="
+              navItems
+                && navItems.length > 0
+                && (!searchQuery || searchQuery.length < 2)
+            "
             heading="Pages"
             class="p-0! **:data-[slot=command-group-heading]:scroll-mt-16 **:data-[slot=command-group-heading]:p-3! **:data-[slot=command-group-heading]:pb-1!"
           >
@@ -147,15 +206,19 @@ onMounted(() => {
               :key="item.href"
               :value="`Navigation ${item.label}`"
               @select="() => runCommand(() => router.push(item.href))"
-              @highlight="() => {
-                selectedType = 'page'
-                copyPayload = ''
-              }"
+              @highlight="
+                () => {
+                  selectedType = 'page';
+                  copyPayload = '';
+                }
+              "
             >
               <ChevronRight />
               {{ item.label }}
             </CommandItem>
           </CommandGroup>
+
+          <!-- Documentation Tree -->
           <CommandGroup
             v-for="group in tree?.children"
             :key="group.title"
@@ -166,43 +229,47 @@ onMounted(() => {
               <CommandItem
                 v-for="item in group.children?.filter((i: NavigationItem) => i.type === 'page' || i.type === 'component')"
                 :key="item.title"
-                :value="item.title?.toString() ? `${group.title} ${item.title}` : ''"
-                :keywords="item.type === 'component' ? ['component'] : undefined"
-                @highlight="() => handlePageHighlight(item.type === 'component', item)"
+                :value="
+                  item.title?.toString() ? `${group.title} ${item.title}` : ''
+                "
+                :keywords="
+                  item.type === 'component' ? ['component'] : undefined
+                "
+                @highlight="
+                  () => handlePageHighlight(item.type === 'component', item)
+                "
                 @select="() => runCommand(() => router.push(item.path))"
               >
-                <div v-if="item.type === 'component'" class="aspect-square size-4 rounded-full border border-dashed border-muted-foreground" />
+                <div
+                  v-if="item.type === 'component'"
+                  class="aspect-square size-4 rounded-full border border-dashed border-muted-foreground"
+                />
                 <ChevronRight v-else />
                 {{ item.title }}
               </CommandItem>
             </template>
           </CommandGroup>
+
+          <!-- Click to Copy Item -->
           <CommandGroup
-            v-for="colorPalette in colors"
-            :key="colorPalette.name"
-            :heading="colorPalette.name.charAt(0).toUpperCase() + colorPalette.name.slice(1)"
+            v-if="!searchQuery || searchQuery.length < 2"
+            heading="Actions"
             class="p-0! **:data-[slot=command-group-heading]:p-3!"
           >
             <CommandMenuItem
-              v-for="color in colorPalette.colors"
-              :key="color.hex"
-              :value="color.className"
-              :keywords="['color', color.name, color.className]"
-              @highlight="() => handleColorHighlight(color)"
-              @select="() => runCommand(() => copy(color.oklch))"
+              value="click to copy"
+              :keywords="['copy', 'clipboard', 'click']"
+              @highlight="handleCopyHighlight"
+              @select="() => runCommand(() => copy('click to copy'))"
             >
-              <div
-                class="border-ghost aspect-square size-4 rounded-sm bg-(--color) after:rounded-sm"
-                :style="{ '--color': color.oklch }"
-              />
-              {{ color.className }}
-              <span class="ml-auto font-mono text-xs font-normal text-muted-foreground tabular-nums">
-                {{ color.oklch }}
-              </span>
+              <Copy class="size-4" />
+              click to copy
             </CommandMenuItem>
           </CommandGroup>
+
+          <!-- Blocks -->
           <CommandGroup
-            v-if="blocks?.length"
+            v-if="blocks?.length && (!searchQuery || searchQuery.length < 2)"
             heading="Blocks"
             class="p-0! **:data-[slot=command-group-heading]:p-3!"
           >
@@ -210,13 +277,25 @@ onMounted(() => {
               v-for="block in blocks"
               :key="block.name"
               :value="block.name"
-              :keywords="['block', block.name, block.description, ...block.categories]"
+              :keywords="[
+                'block',
+                block.name,
+                block.description,
+                ...block.categories,
+              ]"
               @highlight="() => handleBlockHighlight(block)"
-              @select="() => runCommand(() => router.push(`/blocks/${block.categories[0]}#${block.name}`))"
+              @select="
+                () =>
+                  runCommand(() =>
+                    router.push(`/blocks/${block.categories[0]}#${block.name}`),
+                  )
+              "
             >
               <Square />
               {{ block.description }}
-              <span class="ml-auto font-mono text-xs font-normal text-muted-foreground tabular-nums">
+              <span
+                class="ml-auto font-mono text-xs font-normal text-muted-foreground tabular-nums"
+              >
                 {{ block.name }}
               </span>
             </CommandMenuItem>
@@ -234,11 +313,11 @@ onMounted(() => {
             <CornerDownLeft />
           </CommandMenuKbd>
           <span v-if="selectedType === 'page' || selectedType === 'component'">Go to Page</span>
-          <span v-if="selectedType === 'color'">Copy OKLCH</span>
+          <span v-if="selectedType === 'copy'">Click to Copy</span>
         </div>
         <Separator v-if="copyPayload" orientation="vertical" class="h-4!" />
         <div v-if="copyPayload" class="flex items-center gap-1">
-          <CommandMenuKbd>{{ isMac ? '⌘' : 'Ctrl' }}</CommandMenuKbd>
+          <CommandMenuKbd>{{ isMac ? "⌘" : "Ctrl" }}</CommandMenuKbd>
           <CommandMenuKbd>C</CommandMenuKbd>
           {{ copyPayload }}
         </div>

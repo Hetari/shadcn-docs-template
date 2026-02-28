@@ -81,6 +81,7 @@ export default defineNuxtConfig({
       "bash",
       "astro",
       "toml",
+      "yaml",
     ],
   },
 
