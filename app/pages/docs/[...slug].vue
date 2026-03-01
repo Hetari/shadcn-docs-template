@@ -173,9 +173,6 @@ useSeoMeta({
           <DocsTableOfContents :toc="page.body.toc" />
           <div class="h-12" />
         </div>
-        <div class="flex flex-1 flex-col gap-12 px-6">
-          <CarbonAds />
-        </div>
       </div>
     </div>
   </div>
