@@ -7,6 +7,7 @@ const { data, pending, error } = useLazyFetch<{
   stargazers_count: number;
 }>(siteConfig.links.githubAPI, {
   server: false,
+  cache: "no-cache",
 });
 
 const stars = computed<string | null>(() => {
@@ -17,6 +18,12 @@ const stars = computed<string | null>(() => {
   return count >= 1000
     ? `${(count / 1000).toFixed(1)}k`
     : count.toLocaleString();
+});
+
+watch(error, (err) => {
+  if (err) {
+    console.error("Failed to fetch GitHub stars:", err);
+  }
 });
 </script>
 
